@@ -69,6 +69,9 @@ io.on('connection',(socket)=>{
             room: user.room,
             users: getUserInRoom(user.room)
         })
+        io.emit('roomListvalue',{
+            roomlist: RoomList()
+        })
         }
     })
 
