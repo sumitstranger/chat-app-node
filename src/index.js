@@ -4,7 +4,7 @@ const http = require('http')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
 const {generateMessage, generateLocationMessage} = require('./utils/messages')
-const {addUser,removeUser,getUser,getUserInRoom} = require('./utils/users')
+const {addUser,removeUser,getUser,getUserInRoom,RoomList} = require('./utils/users')
 
 const app = express()
 const server = http.createServer(app)
@@ -31,9 +31,16 @@ io.on('connection',(socket)=>{
 
         socket.emit('message',generateMessage('Admin','Welcome!!!'))
         socket.broadcast.to(user.room).emit('message',generateMessage('Admin',`${user.username} has joined!`))
+        //const roomList= RoomList()
+        //console.log();
+        
         io.to(user.room).emit('roomData',{
             room: user.room,
-            users: getUserInRoom(user.room)
+            users: getUserInRoom(user.room),
+            
+        })
+        io.emit('roomListvalue',{
+            roomlist: RoomList()
         })
         callback()
     })
@@ -71,3 +78,8 @@ server.listen(port, ()=>{
     console.log(`Server is running on ${port}`);
     
 })
+
+
+
+
+
